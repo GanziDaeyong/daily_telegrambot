@@ -5,10 +5,13 @@ frameworkVersion: '3'
 provider:
   name: aws
   runtime: python3.8
+  stage: dev
+  region: ap-northeast-2
+  role: arn:aws:iam::129060501255:role/telegram-lambda-role
 
 functions:
   hello:
     handler: handler.hello
     events:
-      schedule: cron(0/1 8-20 ? * * *)
+      - schedule: cron(0/1 8-20 ? * * *)
 

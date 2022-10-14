@@ -90,3 +90,9 @@ telegram.jpg
 
 # virtual env
 venv*
+
+### Serverless ###
+# Ignore build directory
+.serverless
+
+# End of https://www.toptal.com/developers/gitignore/api/serverless
