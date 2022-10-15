@@ -9,9 +9,17 @@ provider:
   region: ap-northeast-2
   role: arn:aws:iam::129060501255:role/telegram-lambda-role
 
-functions:
-  hello:
-    handler: handler.hello
-    events:
-      - schedule: cron(0/1 8-20 ? * * *)
+plugins:
+  - serverless-python-requirements
+  # - serverless-offline-ssm
+  # - serverless-offline
 
+functions:
+  noti:
+    handler: handler.noti
+    environment: 
+      BOT_TOKEN: ${ssm:BOT_TOKEN_ENCRPYTED}
+      CHAT_ID: ${ssm:CHAT_ID}
+    events:
+      - schedule: cron(0 10 * * ? *)
+      # - schedule: cron(0/1 * * * ? *)
