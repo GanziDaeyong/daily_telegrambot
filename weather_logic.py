@@ -3,25 +3,23 @@ import json
 import datetime
 
 
-def get_raw_weather(key):
+def get_weather(key):
+
+    ## url
     url_wo_date = f"http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey={key}&numOfRows=1000&dataType=JSON&pageNo=1&base_time=0500&nx=61&ny=125"
     date = str(datetime.date.today()).replace("-", "").strip()
     url = url_wo_date + "&base_date=" + date
 
+    ## get response
     raw = ((requests.get(url)).content).decode()
     raw_dict = json.loads(raw)
+    raw_weather = raw_dict["response"]["body"]["items"]["item"]
 
-    body_dict = raw_dict["response"]["body"]["items"]["item"]
-
-    return body_dict
-
-
-def process_weather(raw_weather):
-
-    ## get today's
+    ## get today's one
     date = str(datetime.date.today()).replace("-", "").strip()
     raw_weather = [v for v in raw_weather if v["fcstDate"] == date]
 
+    ## process by categories
     temp_li = [item for item in raw_weather if item["category"] == "TMP"]
     rain_percentage_li = [item for item in raw_weather if item["category"] == "POP"]
     rain_type_li = [item for item in raw_weather if item["category"] == "PTY"]
@@ -29,6 +27,7 @@ def process_weather(raw_weather):
 
     fcst_res = ""
 
+    ## make msg
     for _, (temp, sky, rainp, raint) in enumerate(
         zip(temp_li, sky_li, rain_percentage_li, rain_type_li)
     ):
