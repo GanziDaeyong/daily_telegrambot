@@ -11,15 +11,16 @@ provider:
 
 plugins:
   - serverless-python-requirements
-  # - serverless-offline-ssm
-  # - serverless-offline
 
 functions:
   noti:
     handler: handler.noti
     environment: 
-      BOT_TOKEN: ${ssm:BOT_TOKEN_ENCRPYTED}
+      BOT_TOKEN: ${ssm:BOT_TOKEN}
       CHAT_ID: ${ssm:CHAT_ID}
+      WEATHER_ENCODING: ${ssm:/weatherapi/encodingkey}
+      WEATHER_DECODING: ${ssm:/weatherapi/decodingkey}
+
     events:
-      - schedule: cron(0 10 * * ? *)
+      - schedule: cron(30 22 * * ? *)
       # - schedule: cron(0/1 * * * ? *)
