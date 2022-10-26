@@ -1,6 +1,7 @@
 import requests
 import json
 import datetime
+import os
 
 
 def get_weather(key):
@@ -16,7 +17,10 @@ def get_weather(key):
     raw_weather = raw_dict["response"]["body"]["items"]["item"]
 
     ## get today's one
-    date = str(datetime.date.today()).replace("-", "").strip()
+
+    # considering gmt
+    date = str(datetime.date.today() + datetime.timedelta(days=1)).replace("-","").strip()
+    #date = str(datetime.date.today()).replace("-", "").strip()
     raw_weather = [v for v in raw_weather if v["fcstDate"] == date]
 
     ## process by categories
@@ -49,3 +53,8 @@ def get_weather(key):
         fcst_res += f"[{temp['fcstTime']}] {raint_s}({rainp['fcstValue']}%), {temp['fcstValue']}도, 하늘은{sky_s}\n"
 
     return fcst_res
+
+
+if __name__ == "__main__":
+    btk = os.environ.get("BOT_TOKEN")
+    get_weather(os.environ.get(btk))
